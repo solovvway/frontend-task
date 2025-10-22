@@ -1,11 +1,16 @@
-
 export default function Home() {
   const now = new Date().toISOString();
   return (
-    <main>
-      <h1>Server-Side Rendering Demo</h1>
+    <main style={{ textAlign: 'center', padding: '20px' }}>
+      <h1 style={{ fontSize: '2.5rem', color: '#f83636ff', marginBottom: '10px' }}>
+        YTime
+      </h1>
+
+      <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: '#555' }}>
+        время с любовью для вас
+      </p>
       <p>Текущее время (сгенерировано на сервере):</p>
-      <p>{now}</p>
+      <p style={{ fontSize: '1rem', color: '#ffffffff' }}>{now}</p>
     </main>
   );
 }
