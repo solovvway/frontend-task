@@ -1,0 +1,10 @@
+<iframe id="app" src="http://localhost:3000/"></iframe>
+
+<script>
+  document.getElementById('app').onload = function() {
+    this.contentWindow.postMessage({
+      type: 'SET_B2B_PARTNER_ICON',
+      payload: { name: 'embed', src: 'test' }
+    }, '*');
+  };
+</script>

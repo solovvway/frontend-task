@@ -14,3 +14,24 @@ url_p = f"{base}?name={quote(name)}&src={quote(src)}"
 
 print(jsbin_p)
 print(url_p)
+
+
+html_p='''
+<iframe id="app" src="BASE"></iframe>
+
+<script>
+  document.getElementById('app').onload = function() {
+    setTimeout(() => {
+      this.contentWindow.postMessage({
+        type: 'SET_B2B_PARTNER_ICON',
+        payload: {
+          name: 'NAME',
+          src: 'SRC'
+        }
+      }, 'http://localhost:3000'); // Укажите точный origin
+    }, 100);
+  };
+</script>
+'''.replace('BASE', base).replace('NAME', name).replace('SRC', src)
+
+print(html_p)

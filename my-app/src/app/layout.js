@@ -29,16 +29,19 @@ function Footer() {
   });
 
   React.useEffect(() => {
-    const handleB2BPartnerIcon = (event) => {
-      const { name, src } = event.detail || {};
-      setIconData({
-        name: name || 'img',
-        src: src || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/400px-Yandex_icon.svg.png',
-      });
+    const handleMessage = (event) => {
+      // 🔒 В продакшене обязательно проверяйте event.origin!
+      if (event.data?.type === 'SET_B2B_PARTNER_ICON') {
+        const { name, src } = event.data.payload || {};
+        setIconData({
+          name: name || 'img',
+          src: src || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/400px-Yandex_icon.svg.png',
+        });
+      }
     };
 
-    window.addEventListener('b2bPartnerIcon', handleB2BPartnerIcon);
-    return () => window.removeEventListener('b2bPartnerIcon', handleB2BPartnerIcon);
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   const element = React.createElement(iconData.name, {
