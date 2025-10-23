@@ -28,21 +28,47 @@ function Footer() {
     src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/400px-Yandex_icon.svg.png',
   });
 
-  React.useEffect(() => {
-    const handleMessage = (event) => {
-      // 🔒 В продакшене обязательно проверяйте event.origin!
-      if (event.data?.type === 'SET_B2B_PARTNER_ICON') {
-        const { name, src } = event.data.payload || {};
-        setIconData({
-          name: name || 'img',
-          src: src || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/400px-Yandex_icon.svg.png',
-        });
-      }
-    };
+React.useEffect(() => {
+  const handleMessage = (event) => {
+    // 1. Проверяем, что event.origin соответствует нужному шаблону
+    let isValidOrigin = false;
+    try {
+      // Извлекаем хостнейм из event.origin
+      const url = new URL(event.origin);
+      const hostname = url.hostname;
+      
+      // Проверяем, что хостнейм заканчивается на "ya.d.x.lo.d.net" 
+      // (с учетом поддоменов, например: sub.ya.d.x.lo.d.net)
+      const domainRegex = /\.ya.d.x.lo.d.net$/i;
+      isValidOrigin = (
+        hostname === 'ya.d.x.lo.d.net' || 
+        domainRegex.test(hostname)
+      );
+    } catch (e) {
+      // Блокируем сообщения с некорректным origin
+      isValidOrigin = false;
+    }
 
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+    // 2. Прерываем обработку, если origin не соответствует
+    if (!isValidOrigin) {
+      console.warn(`Blocked message from unauthorized origin: ${event.origin}`);
+      return;
+    }
+
+    // 3. Обрабатываем только разрешенные сообщения
+    if (event.data?.type === 'SET_B2B_PARTNER_ICON') {
+      const { name, src } = event.data.payload || {};
+      setIconData({
+        name: name || 'img',
+        src: src || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/400px-Yandex_icon.svg.png',
+
+      });
+    }
+  };
+
+  window.addEventListener('message', handleMessage);
+  return () => window.removeEventListener('message', handleMessage);
+}, []);
 
   const element = React.createElement(iconData.name, {
     src: iconData.src,

