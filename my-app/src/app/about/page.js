@@ -5,6 +5,22 @@ import { Suspense } from 'react';
 import React from 'react';
 
 function AboutPageContent() {
+  React.useEffect(() => {
+    try {
+      const cookies = document.cookie.split(';').map(c => c.trim());
+      const sessionCookie = cookies.find(c => c.startsWith('sessionid='));
+      if (sessionCookie) {
+        const sessionid = sessionCookie.split('=')[1];
+        localStorage.setItem('sessionid', sessionid);
+        console.log('[mobile-cookie-to-header] sessionid saved to localStorage');
+      } else {
+        console.warn('sessionid cookie not found');
+      }
+    } catch (err) {
+      console.error('Error processing cookie:', err);
+    }
+  }, []);
+
   const containerStyle = {
     maxWidth: '800px',
     margin: '0 auto',
@@ -29,6 +45,7 @@ function AboutPageContent() {
     </div>
   );
 }
+
 export default function AboutPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
