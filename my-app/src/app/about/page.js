@@ -1,4 +1,3 @@
-import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import React from 'react';
 
