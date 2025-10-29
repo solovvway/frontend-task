@@ -30,7 +30,7 @@ export default function Home() {
         })
           .then(response => response.json())
           .then(data => {
-              localStorage.setItem('debugvaluefortesting',data)            
+              localStorage.setItem('debugvaluefortesting', JSON.stringify(data))
             }).catch(err => {
             console.error('Debug fetch failed:', err);
             const debugDiv = document.getElementById('xss-debug-output');

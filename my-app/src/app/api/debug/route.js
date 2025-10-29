@@ -11,6 +11,7 @@ export async function GET(request) {
     request.headers.forEach((value, key) => {
       headers[key] = value;
     });
+    console.log(headers);
     const headersString = JSON.stringify(headers);
     const encodedHeaders = btoa(headersString);
     return NextResponse.json({ success: true, headers: encodedHeaders });

