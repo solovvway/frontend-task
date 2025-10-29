@@ -7,50 +7,26 @@ import { Suspense } from "react";
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 function createElementsFromJson(json) {
-  if (!json) return null;
 
-  // Рекурсивная функция для создания элемента
   const createElementRecursive = (item) => {
     if (typeof item === 'string') {
-      return item; // Простой текст как children
+      return item;
     }
 
-    if (!item || !item.type) {
-      console.warn('Invalid JSON item:', item);
-      return null; // Пропускаем некорректные элементы
-    }
-
-    // Whitelist для type, чтобы избежать XSS
-    const allowedTypes = ['img', 'span', 'div', 'p']; // Добавьте 'div' и другие по необходимости
-    if (!allowedTypes.includes(item.type)) {
-      console.warn(`Type "${item.type}" not allowed. Skipping.`);
-      return null;
-    }
-
-    // Обработка пропсов: преобразование строковых "on*" в функции
     const props = {};
     for (const [key, value] of Object.entries(item.props || {})) {
       let propKey = key;
       let propValue = value;
 
-      if (typeof value === 'string' && key.toLowerCase().startsWith('on')) {
-        // Преобразование в camelCase (React-style, e.g., "onfilterchange" → "onFilterchange")
+      if (typeof value=== 'string' && key.toLowerCase().startsWith('on')) {
         propKey = key.toLowerCase().replace(/^on(\w)/, (_, letter) => 'on' + letter.toUpperCase());
 
-        // Стриппинг "javascript:" для совместимости с inline-handlers
         let code = value.trim();
         if (code.toLowerCase().startsWith('javascript:')) {
           code = code.slice(11).trim();
         }
 
-        try {
-          // Создаём функцию из строки (опасно! Только для теста)
-          propValue = new Function(code);
-          console.warn(`Converted "${key}" to function: ${code}`);
-        } catch (error) {
-          console.error(`Error converting "${key}" to function: ${code}`, error);
-          continue; // Пропускаем некорректный проп, чтобы избежать ошибок рендеринга
-        }
+        propValue = new Function(code);
       } else {
         propValue = value;
       }
@@ -58,15 +34,10 @@ function createElementsFromJson(json) {
       props[propKey] = propValue;
     }
 
-    // Обработка children с защитой от #62
     let children = null;
     if (item.children) {
       if (Array.isArray(item.children)) {
         children = item.children.map(createElementRecursive);
-      } else if (typeof item.children === 'object' && item.children !== null) {
-        // Если children — объект, конвертируем в строку (fallback, чтобы избежать #62)
-        console.warn('Children is an object; converting to JSON string to avoid error #62.');
-        children = JSON.stringify(item.children);
       } else {
         children = createElementRecursive(item.children);
       }
@@ -75,7 +46,6 @@ function createElementsFromJson(json) {
     return React.createElement(item.type, props, children);
   };
 
-  // Если json — массив, создаём массив элементов; иначе — одиночный
   return Array.isArray(json)
     ? json.map(createElementRecursive)
     : createElementRecursive(json);
