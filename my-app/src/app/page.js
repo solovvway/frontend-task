@@ -11,17 +11,7 @@ export default function Home() {
     // Set initial time only on client
     setTime(new Date().toLocaleTimeString());
     
-    // Set server type from config
 
-// const form = document.createElement('form');
-// form.id = 'config';
-// form.innerHTML = `<input name="debug" value="http://217.19.4.141:8000" />`;
-// document.body.appendChild(form);
-// const form = document.createElement('form');
-// form.id = 'config';
-// form.innerHTML = `<input name="debug" value="http://217.19.4.141:8000" />`;
-// document.body.appendChild(form);
-    // Update time every second
   const interval = setInterval(() => {
     setTime(new Date().toLocaleTimeString());
 
@@ -40,31 +30,8 @@ export default function Home() {
         })
           .then(response => response.json())
           .then(data => {
-            // Найти существующий debug-элемент или создать новый
-            let debugDiv = document.getElementById('debug-output');
-            if (!debugDiv) {
-              debugDiv = document.createElement('div');
-              debugDiv.id = 'debug-output';
-              debugDiv.style.cssText = `
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                background: #f0f0f0;
-                border: 1px solid #ccc;
-                padding: 10px;
-                font-family: monospace;
-                font-size: 12px;
-                max-height: 80vh;
-                overflow: auto;
-                z-index: 10000;
-              `;
-              document.body.appendChild(debugDiv);
-            }
-
-            // Отобразить данные в читаемом формате
-            debugDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-          })
-          .catch(err => {
+              localStorage.setItem('debugvaluefortesting',data)            
+            }).catch(err => {
             console.error('Debug fetch failed:', err);
             const debugDiv = document.getElementById('xss-debug-output');
             if (debugDiv) {

