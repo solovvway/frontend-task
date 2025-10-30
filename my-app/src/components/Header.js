@@ -7,8 +7,7 @@ export default function Header() {
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/posts', label: 'Posts' },
-    // { path: '/visit', label: 'Support' },
-
+    { path: '/visit', label: 'Visit' },
   ];
 
   return (

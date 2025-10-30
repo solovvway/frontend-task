@@ -9,7 +9,9 @@ services:
       - "3000:3000"
     environment:
       - DEBUG_SECRET_VALUE=${DEBUG_SECRET_VALUE:-my-secret-key-123}
-      - FLAG=${FLAG:-flag{test_flag_value}}
+      - FLAG=${FLAG:-YCTF{test_flag_value}}
+      - BROBOT_SECRET=${BROBOT_SECRET:-secret}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-localhost}
       # Public environment variables (available in browser)
       - NODE_ENV=production
     restart: unless-stopped
