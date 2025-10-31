@@ -24,14 +24,29 @@ Thumbs.db
 # Git
 .git
 .gitignore
+.gitattributes
 
 # Documentation
 *.md
-!README.md
 
 # Testing
 coverage
 .nyc_output
+__tests__
+*.test.js
+*.spec.js
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
 
 # Misc
 *.log
+.eslintrc.json
+.prettierrc
+tsconfig.json
+jsconfig.json
+postcss.config.mjs
+next.config.mjs
+next.config.ts
